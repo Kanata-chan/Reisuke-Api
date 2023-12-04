@@ -986,7 +986,7 @@ router.get('/nsfw/ahegao', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/danzzcoding/data-danzzapi.xyz/main/nsfw/ahegao.json`))
+    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/anime/ahegao.json`))
         .then(response => response.json())
         .then(data => {
             var result = data;
