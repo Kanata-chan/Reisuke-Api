@@ -965,7 +965,7 @@ router.get('/nsfw/ass', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/png');
+                res.set('Content-Type', 'image/jpg');
                 res.send(body);
             });
         })
@@ -997,7 +997,7 @@ router.get('/nsfw/ahegao', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/png');
+                res.set('Content-Type', 'image/jpg');
                 res.send(body);
             });
         })
