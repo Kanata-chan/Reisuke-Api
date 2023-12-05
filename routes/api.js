@@ -965,7 +965,7 @@ router.get('/nsfw/ass', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/jpg');
+                res.set('Content-Type', 'image/jpeg');
                 res.send(body);
             });
         })
@@ -997,7 +997,7 @@ router.get('/nsfw/ahegao', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/jpg');
+                res.set('Content-Type', 'image/jpeg');
                 res.send(body);
             });
         })
@@ -1017,7 +1017,7 @@ router.get('/nsfw/bdsm', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/danzzcoding/data-danzzapi.xyz/main/nsfw/bdsm.json`))
+    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/nsfw/bdsm.json`))
         .then(response => response.json())
         .then(data => {
             var result = data;
@@ -1028,7 +1028,7 @@ router.get('/nsfw/bdsm', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/png');
+                res.set('Content-Type', 'image/jpeg');
                 res.send(body);
             });
         })
@@ -1048,7 +1048,7 @@ router.get('/nsfw/blowjob', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/danzzcoding/data-danzzapi.xyz/main/nsfw/blowjob.json`))
+    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/nsfw/blowjob.json`))
         .then(response => response.json())
         .then(data => {
             var result = data;
@@ -1059,7 +1059,7 @@ router.get('/nsfw/blowjob', async (req, res, next) => {
                 encoding: null
             };
             request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/png');
+                res.set('Content-Type', 'image/jpeg');
                 res.send(body);
             });
         })
