@@ -1147,7 +1147,6 @@ router.get('/nsfw/ass', async (req, res, next) => {
 })
 router.get('/nsfw/ahegao', async (req, res, next) => {
     var apikey = req.query.apikey
-    var text = req.query.page
     if (!apikey) return res.json(loghandler.noapikey)
     const check = await cekKey(apikey);
     if (!check) return res.status(403).send({
@@ -1160,21 +1159,55 @@ router.get('/nsfw/ahegao', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/anime/ahegao.json`))
-        .then(response => response.json())
-        .then(data => {
-            var result = data;
-            var result = data[Math.floor(Math.random() * data.length)];
-            var requestSettings = {
-                url: result.url,
-                method: 'GET',
-                encoding: null
-            };
-            request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/jpeg');
-                res.send(body);
-            });
-        })
+    var data = [ "https://cdn.discordapp.com/attachments/770948564947304448/770950434180956160/004-7FVbFKsy0Z0.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/770950436122525716/3d763900d18610184bdf6cc30102150f.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/770950437880856586/3ec23da409a88cbf4bc7daaaf9f50a3d.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/770950439759380520/3f5a759d1dc69dd4ba188ec91c13bf15.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374076270215168/mogami_yoshiaki_sengoku_collection_drawn_by_r44__sample-8869386742f18651f27b9844edbf8487.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374106959544328/0d8f82d2190ab34a58dfdf70379d48bd.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374111305629696/0a35ad05c6d3d2dcce8ee41eafc1c1da.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374110911234088/00ceb0c2-a234-4489-aaf3-fd92d702dec4.gif",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374114480455750/0a748ce5-fa8d-4893-ac86-21100d4d8111.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374115902717952/0a823293ae6d73a5a551ed96d395c085.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374115902717952/0a823293ae6d73a5a551ed96d395c085.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374197708554250/01737-B-z634ccruw.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374561265713192/435-RqgSoMmr39U.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374616014225458/446-tm6e2RNhOTM.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374643557695509/443-K2Hxy9c9FA.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374649732104212/444-BpA5g5jM_hQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374712139415622/431-372ilODZtDw.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374715062452224/00432-I0z-TRhK0dA.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374715691860008/432-99ejYgB_8EI.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374719425445918/00433-D5MhVncwM40.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374725652938812/434-O2p1kFgcJXM.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374729382723594/435-RqgSoMmr39U.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374735849816074/436-WNx39AwbeQ4.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374742380609636/437-7jsAQbZCDMQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374854036783124/429-FiCsrief79Q.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374855333085194/418-WVRNSuH_xb0.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374859187257424/419-PE_QlfkmVUQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374863348662282/420-VAmqHHHKDo.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374867966590996/421-Rwe6_Vfq3DM.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374871719837746/422_BIuU9h5cfI.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374878115889152/423-JIgerUfCsa4.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374906642399252/423-U9pYBn6WlKQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374914166587392/424-Pj94NODjZoE.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374917651267624/424-qdfkiW-FP8.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374927751807016/425-FqG0DXNCF_I.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374935717052476/426-5x4J4OuuFDQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374940171665446/426-drQcdvVsNnQ.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374948978524161/427-YLirbUpKQeY.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771374956008833045/428-AAiKa5S2XDM.jpg"]
+    var result = data[Math.floor(Math.random() * data.length)];
+    var requestSettings = {
+        url: result,
+        method: 'GET',
+        encoding: null
+    };
+    request(requestSettings, function (error, response, body) {
+        res.set('Content-Type', 'image/png');
+        res.send(body);
+    });
     limitAdd(apikey);
 })
 router.get('/nsfw/bdsm', async (req, res, next) => {
@@ -1191,57 +1224,166 @@ router.get('/nsfw/bdsm', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/nsfw/bdsm.json`))
-        .then(response => response.json())
-        .then(data => {
-            var result = data;
-            var result = data[Math.floor(Math.random() * data.length)];
-            var requestSettings = {
-                url: result.url,
-                method: 'GET',
-                encoding: null
-            };
-            request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/jpeg');
-                res.send(body);
-            });
-        })
-    limitAdd(apikey);
-})
-router.get('/nsfw/blowjob', async (req, res, next) => {
-    var apikey = req.query.apikey
-    if (!apikey) return res.json(loghandler.noapikey)
-    const check = await cekKey(apikey);
-    if (!check) return res.status(403).send({
-        status: 403,
-        message: `apikey ${apikey} not found, please register first! https://${req.hostname}/users/signup`,
-        result: "error"
+    var data = [
+    "https://media.discordapp.net/attachments/531827668002275328/682642520060330037/fdbiq6ovshj41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/682430717652893754/62brFYV_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/682747340041224248/4Gg9Cp2_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/682403179966759034/TmOtKZi_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/682217495519690759/3j4PMzx_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/682097348377444353/6dr1sjocd6j41.png",
+    "https://media.discordapp.net/attachments/531827668002275328/681944451509256256/s5olejpbogi41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681880153022136427/lw6pzke4m2j41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681855096870797342/ijj5qvoyc2j41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681855083830706188/boe5obvha2j41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681855060774617121/yda6zvj7a2j41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681633595336425528/1rah2.png",
+    "https://media.discordapp.net/attachments/531827668002275328/681617579437326337/wqecde5s0xi41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681223233403486208/fCNMdAp_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/681072466344411293/6ACB9EE.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680816567189110803/yTj4mnP_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680487709894115333/ZrnsiEE_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680187310377009192/m9dfn0cte4h41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680187145519890496/3B0Qg2t_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680187145209905189/ohbefszcy4i41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680164120334565408/2270b80.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680058208118636562/zlqc3z4b80i41.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/680051413883289726/f68c85c.png",
+    "https://media.discordapp.net/attachments/531827668002275328/680051413312864299/6ae2e79.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/679341436411445256/IUHUn9u_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/678711958500802560/484738f.png",
+    "https://media.discordapp.net/attachments/531827668002275328/678711958048079882/346a200.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/678711957800484884/ddfe48b.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/678711957028864052/a1dc7ca.png",
+    "https://media.discordapp.net/attachments/531827668002275328/677683354623148033/DevilHS-775781-MR.png",
+    "https://media.discordapp.net/attachments/531827668002275328/677362365116841984/erzzz151lkg41.png",
+    "https://media.discordapp.net/attachments/531827668002275328/677028522652467231/image1.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028522501341194/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028518609027102/image9.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028518248579103/image8.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028518021955604/image7.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028517564645376/image6.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028517325701139/image5.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028516713463808/image3.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028516285513738/image2.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028516092706816/image1.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/677028515836723220/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/676127612002631694/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/674469521481793536/lj2edPZ5AD0lLyKJu4JVuBBBOk6ly_EHuFxNx7xqWkQ.png",
+    "https://media.discordapp.net/attachments/531827668002275328/674469495309336578/Ff8oAs5Q1lab8g9AwvYRsN3WE980M1638KJTiicbbqo.png",
+    "https://media.discordapp.net/attachments/531827668002275328/674469461415297034/89eKMcnoEkORlVzG8KqIoZvo4xBOsa8TzSeLcLJqpxk.png",
+    "https://media.discordapp.net/attachments/531827668002275328/674469432143380480/VAlo--OJwESYsuYyetifb6G7feKSvRecA7HbuOPuGKI.png",
+    "https://media.discordapp.net/attachments/531827668002275328/674469228925157376/ym2eoh217i841.png",
+    "https://media.discordapp.net/attachments/531827668002275328/674469195538235402/9a913fhf42a31.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673780241491165216/vwah47yqt4o31.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673775654524944424/h9mg9nb8ele41.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673766182691799090/FFZUenqIv9lJLYphG-syZyKyCEMH2kLzMH3hCeWgMFo.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673765900410945564/NZ28NeaHY6LQQmysatMVVLVESpOySnUtZORluTLASp4.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673764708507189261/xt8ov8wtzv931.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673764414343741440/vfeIOOfhUUQcZ9VA9wzVA0cdbP9UhpAVPr6qrE5X70I.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673764386048835604/frx8fgaPRWMth55XpBgX0AW7R4dpp0HS9b_UQ7vdyZA.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673760648634826783/bu8mcku29rn31.png",
+    "https://media.discordapp.net/attachments/531827668002275328/673757970676449300/Qi9XysPW-OP-y8RYKOyzl9Nl0vPUh8vHH_ssyag6fr4.png",
+    "https://media.discordapp.net/attachments/531827668002275328/670981689438240778/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/669512612366516234/dark_elementalist_lux_elementalist_lux_and_luxanna_crownguard_league_of_legends_drawn_by_kumiko_shib.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/666766388911931420/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/666260491626086403/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/666063880287420434/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665947713916895232/blagectzq1641.png",
+    "https://media.discordapp.net/attachments/531827668002275328/665721393601577012/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665637982757191680/image3.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665637981511614477/image1.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665637981511614475/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665621659537113098/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/665608395654692864/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/664182605884686349/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/664162725005361162/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/660748893964730369/5b6fe4e2cba55c5700100546781dd46d.png",
+    "https://media.discordapp.net/attachments/531827668002275328/660679829032534036/IMG_20191223_114520.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/660679680797442049/77933007_p0_master1200.png",
+    "https://media.discordapp.net/attachments/531827668002275328/660154664418803748/lPe9gOi.png",
+    "https://media.discordapp.net/attachments/531827668002275328/660154664418803722/cc5nzdcx0r641.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/660154435464462380/JiJjLGu.png",
+    "https://media.discordapp.net/attachments/531827668002275328/660154357853192192/QY6Tinq.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/660096044037832715/80693261_1899427176856409_1937826288324575232_o.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/659482294230319140/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/658075033393954860/image3.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/658075032488116247/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/657016648254881816/7eea07a.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/656896372330725396/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/655454798136475659/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/651118987773476889/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/648392695881924609/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/648392667612577792/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/648392530982862870/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/648392239470477333/image1.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/648392239470477332/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/644958744945360906/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/644717099402657792/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/643475499301077002/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/641680857106743305/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/641136647047610408/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/640395541133393920/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/639262742175416330/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/636157286112559104/himaJYw.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/683361680012345511/vuu6i60p4wj41.png",
+    "https://media.discordapp.net/attachments/531827668002275328/683517408434192416/KQ3VjfG_d.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/632998232452104202/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/632338880300843019/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/631301661557522434/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/630448178491293747/image0.png",
+    "https://media.discordapp.net/attachments/531827668002275328/630448111336161300/image0.png",
+    "https://media.discordapp.net/attachments/531827668002275328/630448109461438474/image0.png",
+    "https://media.discordapp.net/attachments/531827668002275328/630448101211242516/image0.png",
+    "https://media.discordapp.net/attachments/531827668002275328/630448093711564800/image0.png",
+    "https://media.discordapp.net/attachments/531827668002275328/630446043980496906/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/630446037819064328/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/630043978040999936/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/630037129334095873/image0.jpg",
+    "https://media.discordapp.net/attachments/531827668002275328/630037117044523029/image0.jpg",
+    "https://konachan.com/sample/a616f14280c1c3e4c026fad4d6c32c55/Konachan.com%20-%20316710%20sample.jpg",
+    "https://konachan.com/jpeg/3dfcf485e33fc56b503325ef23a78037/Konachan.com%20-%20316568%20aqua_eyes%20blonde_hair%20bondage%20braids%20cameltoe%20fang%20fate_grand_order%20fate_%28series%29%20flat_chest%20long_hair%20scarlettear33%20swimsuit%20tentacles.jpg",
+    "https://konachan.com/sample/fd3336855eff4096c07b0ed3445d54e1/Konachan.com%20-%20316455%20sample.jpg",
+    "https://konachan.com/sample/6b56f616636dee37b9cd7a3f4286bb9c/Konachan.com%20-%20316447%20sample.jpg",
+    "https://konachan.com/sample/6d50fa9d193d2b7be8ea12f362b80c84/Konachan.com%20-%20315883%20sample.jpg",
+    "https://konachan.com/sample/a92c3ad312ecc4fccf7f583e4849c1ae/Konachan.com%20-%20315884%20sample.jpg",
+    "https://konachan.com/sample/346b73a9a6249b76b4d902c1e10e8f3a/Konachan.com%20-%20315828%20sample.jpg",
+    "https://konachan.com/sample/647c499d8b46970042625601133a0d18/Konachan.com%20-%20315321%20sample.jpg",
+    "https://konachan.com/sample/362725c208ad806b49e63f40561caeac/Konachan.com%20-%20315320%20sample.jpg",
+    "https://konachan.com/sample/7e331d148a2b345d8891d4b2a9c5d7a0/Konachan.com%20-%20315248%20sample.jpg",
+    "https://konachan.com/sample/96f609d7d44c728efc56981706925b31/Konachan.com%20-%20315247%20sample.jpg",
+    "https://konachan.com/jpeg/0918ba4a839a54019d9134c9a53c387b/Konachan.com%20-%20315198%20anthropomorphism%20ass%20azur_lane%20bondage%20long_hair%20panties%20pantyhose%20red_hair%20see_through%20skirt%20skirt_lift%20twintails%20underwear%20yoshiheihe.jpg",
+    "https://konachan.com/sample/f9fa53d9c84cb91e888ffebbaadb60dd/Konachan.com%20-%20314894%20sample.jpg",
+    "https://konachan.com/sample/a5493092fa07fd55606e05b4bf98748a/Konachan.com%20-%20314756%20sample.jpg",
+    "https://konachan.com/sample/bc2d55af82a86072330a918499be8788/Konachan.com%20-%20314542%20sample.jpg",
+    "https://konachan.com/sample/6e240863e0243abfe6bb8d959464fa7c/Konachan.com%20-%20314481%20sample.jpg",
+    "https://konachan.com/sample/72faaad5c52e32d951f30c92954bee2e/Konachan.com%20-%20314326%20sample.jpg",
+    "https://konachan.com/sample/a2441778a6bafd4251936727b3bd4df3/Konachan.com%20-%20314069%20sample.jpg",
+    "https://konachan.com/sample/266e384f3d043ab4a5e37c108a5a2bfd/Konachan.com%20-%20314065%20sample.jpg",
+    "https://konachan.com/sample/caff5e7274a8141e95822913af15d9da/Konachan.com%20-%20314032%20sample.jpg",
+    "https://konachan.com/sample/851c56b73b204a704410a44605d069aa/Konachan.com%20-%20313782%20sample.jpg",
+    "https://konachan.com/jpeg/163ed4cbe0e542484733e18a953683ea/Konachan.com%20-%20313778%20aliasing%20arknights%20black_hair%20blush%20bodhi_wushushenghua%20bondage%20breasts%20chain%20cleavage%20eunectes_%28arknights%29%20flowers%20garter%20goggles%20tail.jpg",
+    "https://konachan.com/sample/e94bc73cafb5d81656f0f54051a3676f/Konachan.com%20-%20313642%20sample.jpg",
+    "https://konachan.com/sample/0fe74ca43f2ccdb1d2406f5dfcde1a1a/Konachan.com%20-%20313640%20sample.jpg",
+    "https://konachan.com/sample/bef9b55682a955d13d373f3e6f179dcd/Konachan.com%20-%20313498%20sample.jpg",
+    "https://konachan.com/sample/01db1ae10738b66923954534a30ffb52/Konachan.com%20-%20313423%20sample.jpg",
+    "https://konachan.com/sample/d85db565ce195e5fbc3fcc4045f80fe0/Konachan.com%20-%20313418%20sample.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771001917278912543/573-16reT2pK3sc.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771017155272507412/1758-DcgdH3kfJTY.jpg",
+    "https://cdn.discordapp.com/attachments/770948564947304448/771017302874390558/1814-5G-g9PY315s.jpg"]
+    var result = data[Math.floor(Math.random() * data.length)];
+    var requestSettings = {
+        url: result,
+        method: 'GET',
+        encoding: null
+    };
+    request(requestSettings, function (error, response, body) {
+        res.set('Content-Type', 'image/png');
+        res.send(body);
     });
-    let limit = await isLimit(apikey);
-    if (limit) return res.status(403).send({
-        status: 403,
-        message: 'your limit has been exhausted, reset every 12 PM'
-    });
-    fetch(encodeURI(`https://raw.githubusercontent.com/YosaArdn/database-api/master/nsfw/blowjob.json`))
-        .then(response => response.json())
-        .then(data => {
-            var result = data;
-            var result = data[Math.floor(Math.random() * data.length)];
-            var requestSettings = {
-                url: result.url,
-                method: 'GET',
-                encoding: null
-            };
-            request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/jpeg');
-                res.send(body);
-            });
-        })
     limitAdd(apikey);
 })
 router.get('/nsfw/cuckold', async (req, res, next) => {
     var apikey = req.query.apikey
-    var text = req.query.page
     if (!apikey) return res.json(loghandler.noapikey)
     const check = await cekKey(apikey);
     if (!check) return res.status(403).send({
@@ -1254,21 +1396,64 @@ router.get('/nsfw/cuckold', async (req, res, next) => {
         status: 403,
         message: 'your limit has been exhausted, reset every 12 PM'
     });
-    fetch(encodeURI(`https://raw.githubusercontent.com/danzzcoding/data-danzzapi.xyz/main/nsfw/cuckold.json`))
-        .then(response => response.json())
-        .then(data => {
-            var result = data;
-            var result = data[Math.floor(Math.random() * data.length)];
-            var requestSettings = {
-                url: result.url,
-                method: 'GET',
-                encoding: null
-            };
-            request(requestSettings, function (error, response, body) {
-                res.set('Content-Type', 'image/png');
-                res.send(body);
-            });
-        })
+    var data = [
+    "https://external-preview.redd.it/u5s6LYlHNzp1vGMkBpp_lpF31vn74g1aLd0cT3n69nk.jpg?width=640&height=905&crop=smart&auto=webp&s=330c2b07c7d20e0d29c8d633bd448df84372ef12",
+    "https://i.redd.it/svlfk6pjpoa51.jpg",
+    "https://preview.redd.it/px4ags2vura51.jpg?width=640&crop=smart&auto=webp&s=a7f572e4381d42825eb8982af147e36b32086a20",
+    "https://preview.redd.it/eqisu83qxja51.jpg?width=640&crop=smart&auto=webp&s=54bbd433d0f3206555845a13ad7aa8a29d6eb31a",
+    "https://external-preview.redd.it/8DyA_Dx4zSEL6V-7RQYO4OhjbQtvY3Ag4rlXysx_H1E.jpg?width=640&crop=smart&auto=webp&s=b15c632b0cdd50788a99c1a5fc645ce102739a9a",
+    "https://preview.redd.it/oic475rmc5a51.jpg?width=640&crop=smart&auto=webp&s=bbec12eccfdd7b6733e87044b228f4ddcf8fa745",
+    "https://preview.redd.it/lylstsbca0a51.jpg?width=640&crop=smart&auto=webp&s=476314691a2e8ad0d617864478ef3f391e03db4c",
+    "https://preview.redd.it/hfzd4v5w90a51.jpg?width=640&crop=smart&auto=webp&s=ccbc7ccb7843d860a3e263564da4e0099418475b",
+    "https://preview.redd.it/gxa5cgl2a0a51.jpg?width=640&crop=smart&auto=webp&s=d78c2096228f5fdca2ca8ee2bbfc5a43a8b7673e",
+    "https://preview.redd.it/9fz5s4txe0a51.jpg?width=640&crop=smart&auto=webp&s=23e34c4b45ab6e010b45a710bb341cd7803756d5",
+    "https://preview.redd.it/6verfsj2h0a51.jpg?width=640&crop=smart&auto=webp&s=e8dde94d1609b874ecb7b934342f9221f4240a7b",
+    "https://preview.redd.it/qspm0fj1b0a51.jpg?width=640&crop=smart&auto=webp&s=2517d1a807c43b4e977f62dc1fbe84fa5582b378",
+    "https://preview.redd.it/p7eh0n7ab0a51.jpg?width=640&crop=smart&auto=webp&s=aa441c66c7f581dce98dd74f8edc2a3f47e192ae",
+    "https://preview.redd.it/qspu4gtte0a51.jpg?width=640&crop=smart&auto=webp&s=9a1e9fa1eabb8de0f7a7ca3c45e523dfc1015306",
+    "https://preview.redd.it/r4brq4hgb0a51.jpg?width=640&crop=smart&auto=webp&s=49aef26c9c3cac03dbd409a33bb24f0493a67e49",
+    "https://preview.redd.it/vhuh8ecqis951.jpg?width=640&crop=smart&auto=webp&s=037f5b6f2103c7addb9e7d2025800425cdd65eb0",
+    "https://preview.redd.it/lq60bcd84r951.jpg?width=640&crop=smart&auto=webp&s=3c5927bcc794cd9b5c27aa06eb1bbab684e534f1",
+    "https://preview.redd.it/9rfpyf8lpi951.jpg?width=640&crop=smart&auto=webp&s=a45ebf4afa922b805cf07ff277750a682ba06cc3",
+    "https://i.imgur.com/jpUzn2Sl.jpg",
+    "https://external-preview.redd.it/zzqHXDvEB1wxlcw_DLCYHv5t1cyy2vpPbPLGKVLL2IA.png?width=640&crop=smart&auto=webp&s=8a0189ab1532711f83fcddda72c38ab482d11574",
+    "https://preview.redd.it/5ngzle9v27951.jpg?width=640&crop=smart&auto=webp&s=06aad00ee95e08a7d2f42741a23738283df2a6bf",
+    "https://preview.redd.it/q2w7pdc5g2951.jpg?width=640&crop=smart&auto=webp&s=d007ad44577522f0a9a8a6b6f8e68e4d1c3d04a9",
+    "https://preview.redd.it/u7ih65blu4951.jpg?width=640&crop=smart&auto=webp&s=fd8635757a72267ee7b1f43ad583c8c4f20aa881",
+    "https://preview.redd.it/a09x6t5yau851.jpg?width=640&crop=smart&auto=webp&s=b4a936c682a95b3d1167d6f081f2e413fbbeeced",
+    "https://preview.redd.it/0zbwmjgbos851.png?width=640&crop=smart&auto=webp&s=843927c6c0f025979b47e2a5b80c3dc3a8277df3",
+    "https://external-preview.redd.it/_SBnRvsn9RsgCLA4q73UEVEIYsiU0XWMY9Wj-_gyLcQ.jpg?width=640&crop=smart&auto=webp&s=1150a801109486e3833e1f638b089b147bbee0c6",
+    "https://external-preview.redd.it/TwzyTcr-UF2G7fEztN4wuyLxP9uWWcuPplg2f3MoaIQ.jpg?auto=webp&s=762b5a72e78a48c45dc1656ab380e900d8c4d8ce",
+    "https://external-preview.redd.it/jLACDnpzKi2QlnP6YfJVmCgF_Q3q0RQeSzwtzHvt-x4.jpg?auto=webp&s=01b972577454e0badd9751d158c923c26faff538",
+    "https://external-preview.redd.it/5IBtfs4HZFIyb6j2W4f43ECE7Qy3SC7-NxAMHqrTb2A.jpg?width=640&crop=smart&auto=webp&s=08d46297adfb28307fe67e95d42b074769caf1bc",
+    "https://external-preview.redd.it/W62_5OFBWxqMTsFCSVWtFF95fzSPCQAAyvUglnP0wlU.jpg?width=640&crop=smart&auto=webp&s=bb3bb7fc8524c2a3104ebdc453e9c887b2884fad",
+    "https://i.imgur.com/e1pkoFbl.jpg",
+    "https://media.discordapp.net/attachments/683356351090786329/754001647390425199/xj96381n0tl51.png",
+    "https://preview.redd.it/m05giq0gexk51.jpg?width=640&crop=smart&auto=webp&s=f99d6724880a60b6ca501c7bbab976fa60e00f79",
+    "https://preview.redd.it/lis0v6iinek51.jpg?width=640&crop=smart&auto=webp&s=44c024e27567e76225933b233f2dee50531b63d2",
+    "https://preview.redd.it/9ha5i3pvh4k51.jpg?width=640&crop=smart&auto=webp&s=8f7d8185e9dd210b28827ae7842de95231fcf612",
+    "https://preview.redd.it/j5zwdq59k4k51.jpg?width=960&crop=smart&auto=webp&s=4b4d92bf5e8012c78e6f8ce898fd2fc0ed339729",
+    "https://preview.redd.it/id5t6c19wuj51.jpg?width=640&crop=smart&auto=webp&s=3cff2a823fd2879ce27cf89aa8873228c8808fb2",
+    "https://preview.redd.it/zf4z5nwl7gj51.jpg?width=640&crop=smart&auto=webp&s=80b6cdef314e06025ba3940c917eb15121e8b35d",
+    "https://preview.redd.it/7pusux01edj51.jpg?width=640&crop=smart&auto=webp&s=cba0bb7c7e0fdb41bc3ff0d900b4480df5d625c1",
+    "https://preview.redd.it/5swx9a64c9j51.jpg?width=640&crop=smart&auto=webp&s=7880a1b6fe3c728e456418f88d33c652c48b75ee",
+    "https://preview.redd.it/zglkxq4fd0j51.jpg?width=640&crop=smart&auto=webp&s=32a2e988c45831642c9378a3cc2fa4bd3a876d95",
+    "https://preview.redd.it/a8d135n7fsi51.jpg?width=640&crop=smart&auto=webp&s=be8cd33df8be54b3c8480c674d4ccfbfe18810c1",
+    "https://preview.redd.it/qz368x2wcoi51.jpg?width=640&crop=smart&auto=webp&s=f8af6cada5dcc398ba2fa9b75dd73e5eb9865025",
+    "https://img2.gelbooru.com/samples/bf/ad/sample_bfaddd4539b94f78aca053caa49a9e62.jpg",
+    "https://konachan.com/sample/e6970436ee2b650d3fcde3cb4210e6f2/Konachan.com%20-%20317290%20sample.jpg",
+    "https://konachan.com/sample/2009598d749a5a111e61d5c65e3c757c/Konachan.com%20-%20317279%20sample.jpg",
+    "https://konachan.com/sample/747b76bfb23f7903019da58fb09bea9b/Konachan.com%20-%20316633%20sample.jpg"]
+    var result = data[Math.floor(Math.random() * data.length)];
+    var requestSettings = {
+        url: result,
+        method: 'GET',
+        encoding: null
+    };
+    request(requestSettings, function (error, response, body) {
+        res.set('Content-Type', 'image/png');
+        res.send(body);
+    });
     limitAdd(apikey);
 })
 
